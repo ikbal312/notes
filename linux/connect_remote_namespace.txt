@@ -1,0 +1,7 @@
+1. create two namespac in two remote vm
+    vm1:
+        sudo ip netns add vm1
+    vm2: 
+        sudo ip netns add vm2
+    
+2. 

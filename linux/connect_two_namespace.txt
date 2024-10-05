@@ -1,0 +1,35 @@
+requred package:
+    sudo apt intall route2
+    sudo apt install net-tools
+
+
+1. enable ip forwarding 
+    sudo sysctl net.ipv4.port_forwarding=1
+
+2. create namespaces
+    sudo ip netns add ns1
+    sudo ip netns addd ns2
+
+3. create virtual e
+    sudo ip link add veth-ns1 type veth peer name veth-ns2
+    verify: 
+        sudo ip link list
+
+4. set the cable as NIC
+    sudo ip link set veth-ns1 netns ns1
+    sudo ip link set veth-ns2 netns ns2
+    verify:
+        sudo ip netns exec ns1 ip link
+        sudo ip netns exec ns2 ip link
+5. assign ip address
+    sudo ip netns exec ns1 ip addr add 192.168.0.1/24 dev veth-ns1
+    sudo ip netns exec ns2 ip addr add 192.168.0.2/24 dev veth-ns2
+6. set the interface up 
+    sudo ip netns exec ns1 ip link set veth-ns1 up
+    sudo ip netns exec ns2 ip link set veth-ns2 up
+7.
+    sudo ip netns exec ns1 ip route add default via 192.168.0.1 dev veth-ns1
+    sudo ip netns exec ns2 ip route add default via 192.168.0.2 dev veth-ns2
+    verify:
+        sudo ip netns exec ns1 ip route show
+        sudo ip netns exec ns2 ip route show
