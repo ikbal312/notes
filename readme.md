@@ -1,1 +1,1 @@
-This is My Personal Notes To Explore Technological Concept
+My Personal Notes To Explore Technological Concept
