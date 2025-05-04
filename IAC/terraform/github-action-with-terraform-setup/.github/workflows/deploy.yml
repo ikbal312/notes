@@ -1,0 +1,65 @@
+
+name: Terraform aws Deployment
+
+on:
+    push:
+        branches:
+            - main
+jobs:
+    terraform:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            
+            - name: Setup SSH key
+              run: |
+                mkdir -p ~/.ssh
+                echo "${{secrets.SSH_PRIVATE_KEY}}" > ~/.ssh/id_rsa
+                echo "${{secrets.SSH_PUBLIC_KEY}}" > ~/.ssh/id_rsa.pub
+                chmod 600 ~/.ssh/id_rsa
+                chmod 644 ~/.ssh/id_rsa.pub
+                eval $(ssh-agent -s)
+                ssh-add ~/.ssh/id_rsa
+
+
+            - name: Install Terraform
+              uses: hashicorp/setup-terraform@v1
+              with:
+                cli_config_credentials_token: ${{ secrets.TF_CLOUD_TOKEN }}
+
+
+            - name: Terraform init
+              run: terraform init
+              env:
+                AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+                AWS_SECRECT_ACCESS_KEY: ${{secrets.AWS_SECRECT_ACCESS_KEY}}
+                # Checks that all Terraform configuration files adhere to a canonical format
+            - name: Terraform Format
+              run: terraform fmt -check
+
+
+
+            - name: Terraform Plan
+              run: terraform plan -out=tfplan -var "ssh_public_Key=${{secrets.SSH_PUBLIC_KEY}}"
+              env:
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+            - name: Save Terraform Plan
+              uses: actions/upload-artifact@v4
+              with:
+                name: tfplan
+                path: tfplah
+            
+            - name: Download Terraform Plan
+              uses: actions/download-artifact@v4
+              with:
+                name: tfplan
+                path: .
+
+            - name: Terraform Apply
+              run: terraform apply -auto-approve tfplan
+              env:
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
