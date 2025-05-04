@@ -1,0 +1,20 @@
+---
+- name: Install Nginx on web servers # Playbook to install Nginx on web servers
+  hosts: webservers # Target hosts are defined in the 'webservers' group
+  become: true # Use privilege escalation (sudo) to run tasks as root
+
+  tasks:
+    - name: Update apt repository cache # Task to update the apt package cache
+      apt:
+        update_cache: yes # Update the cache
+
+    - name: Install Nginx # Task to install Nginx package
+      apt:
+        name: nginx # Nginx package name
+        state: present # Ensure Nginx is installed
+
+    - name: Ensure Nginx is running # Task to ensure Nginx service is running
+      service:
+        name: nginx # Nginx service name
+        state: started # Ensure Nginx service is started
+        enabled: yes # Ensure Nginx service is enabled on boot

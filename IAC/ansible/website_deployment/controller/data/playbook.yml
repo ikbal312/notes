@@ -1,0 +1,6 @@
+- name: Test Ansible Setup
+  hosts: managed_nodes
+  tasks:
+    - name: Ping all nodes
+      ansible.builtin.ping:
+

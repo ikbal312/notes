@@ -1,0 +1,7 @@
+websites:
+  - name: webserver1
+    src:  /home/user_name/path/to/webpage1/index.html
+    dest: /var/www/html/index.html
+  - name: webserver2
+    src:  /home/user_name/path/to/webpage2/index.html
+    dest: /var/www/html/index.html

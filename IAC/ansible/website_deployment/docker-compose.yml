@@ -1,0 +1,49 @@
+services:
+  ansible_control:
+    build:
+      context: ./controller
+      dockerfile: Dockerfile
+    container_name: ansible_control
+    hostname: ansible_control
+    volumes:
+      - ./controller/data:/home/ansible/data
+    networks:
+      - ansible_network
+    tty: true
+    stdin_open: true
+  node1:
+    build:
+      context: ./managed
+      dockerfile: Dockerfile
+    container_name: node1
+    hostname: node1
+    networks:
+      - ansible_network
+    tty: true
+    stdin_open: true
+
+  webserver1:
+    build:
+      context: ./managed
+      dockerfile: Dockerfile
+    container_name: webserver1
+    hostname: webserver1
+    networks:
+      - ansible_network
+    tty: true
+    stdin_open: true
+  docker:
+    build:
+      context: ./managed
+      dockerfile: Dockerfile
+    container_name: docker
+    hostname: docker
+    networks:
+      - ansible_network
+    tty: true
+    stdin_open: true
+
+networks:
+  ansible_network:
+
+

@@ -1,0 +1,30 @@
+---
+- name: Install and configure PostgreSQL on EC2 instances
+  hosts: postgresql_servers
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install PostgreSQL
+      apt:
+        name: postgresql
+        state: present
+
+    - name: Install PostgreSQL contrib
+      apt:
+        name: postgresql-contrib
+        state: present
+
+    - name: Start PostgreSQL service
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Ensure PostgreSQL is accessible on port 5432
+      ufw:
+        rule: allow
+        port: '5432'

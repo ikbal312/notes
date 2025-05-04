@@ -1,0 +1,17 @@
+services:
+  ansible_control:
+    build:
+      context: ./controller
+      dockerfile: Dockerfile
+      target: controller
+    container_name: ansible_control
+    hostname: ansible_control
+    volumes:
+      - ./controller/data:/home/ansible/data
+    networks:
+      - ansible_network
+    tty: true
+    stdin_open: true
+
+networks:
+  ansible_network:

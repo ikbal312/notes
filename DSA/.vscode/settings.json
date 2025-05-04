@@ -1,0 +1,29 @@
+{
+    // code-runner ctrl+option+n
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+        "cpp": "cd $dir && g++ -std=c++17 -I . -g $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt",
+        "python": "python3 -u",
+        "go": "go run",
+        "typescript": "ts-node",
+        "rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
+        "nim": "nim compile --verbosity:0 --hints:off --run",
+        "lua": "cd $dir && luabundler bundle $fileName -p '?.lua' -o bundle.lua && lua bundle.lua",
+        "csharp": "cd $dir && dotnet run"
+    },
+    "files.exclude": {
+        "**/main": true,
+        "**/main.dSYM": true,
+        "**/bin": true,
+        "**/obj": true,
+        "**/**.csproj": true,
+    },
+    "omnisharp.enableRoslynAnalyzers": true,
+    "omnisharp.useModernNet": true,
+    "omnisharp.enableImportCompletion": true,
+    "omnisharp.organizeImportsOnFormat": true,
+    "files.associations": {
+        "*.yaml": "dockercompose",
+        "bitset": "cpp"
+    }
+}
